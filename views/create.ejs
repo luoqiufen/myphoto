@@ -1,0 +1,130 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-07-23 10:35:09
+ * @LastEditTime: 2020-07-23 15:38:35
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \photo\views\create.ejs
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新建相册</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <style>
+        body {
+            padding: 1% 5%;
+            background: #faf7f7;
+        }
+        h1{
+            text-align: center;
+        }
+
+        .dir {
+            padding: 1% 5%;
+        }
+
+        .dir button {
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>在线相册</h1>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">相册</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/dir/mkdir">新建相册</a></li>
+                    <li><a href="/pic/upload">上传图片</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dir">
+        <h2>新建相册</h2>
+        <div class="form-group has-feedback has-error">
+            <input type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status"
+                placeholder="请输入相册名称">
+            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        </div>
+        <button class="btn btn-info" id="btn">创建</button>
+    </div>
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+
+    <script>
+        var dirName = '';
+        // 给input绑定输入监听事件
+        // 再输入数据时,触发该事件
+        $('input').on('change',function(){
+            // 获取输入的数据(文件夹名称)
+            var value = $(this).val().trim();
+            console.log(value);
+            // 发送请求,检查value是否已经存在
+            $.ajax({
+                url: '/dir/check?dirName='+value,
+                success: function(result){
+                    // 弹窗提示信息
+                    // alert(result.msg);
+                     
+                    // 修改状态小图标
+                    if(result.status==0){//成功
+                        $('div.has-feedback').removeClass('has-error').addClass('has-success');
+                        $('span.glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                        // 给dirName赋值
+                        dirName = value;
+                    }else{
+                        $('div.has-feedback').removeClass('has-success').addClass('has-error');
+                        $('span.glyphicon').removeClass('glyphicon-ok').addClass('glyphicon-remove');
+                        // 重置
+                        dirName = '';
+                        alert(result.msg)
+                    }
+                }
+            })
+        })
+
+        // 绑定单击事件,发送创建文件夹的请求
+        $('#btn').on('click',function(){
+            if(!dirName){
+                alert('相册名不能使用');
+                return;
+            }
+            // 创建文件夹请求 
+            $.ajax({
+                url:'/dir/mkdir',
+                method:'post',
+                data:{dirName:dirName},
+                success:function(result){
+                    alert(result.msg)
+                    if(result.status==0){
+                        // 成功创建,跳转回首页
+                        location.href = '/';
+                    }
+                }
+            })
+        })
+
+        
+    </script>
+</body>
+
+</html>
