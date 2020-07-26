@@ -1,42 +1,18 @@
-<!--
- * @Author: your name
- * @Date: 2020-07-23 09:26:44
- * @LastEditTime: 2020-07-23 18:47:32
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \photo\views\index.ejs
--->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>在线相册</title>
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <style>
-        body {
-            padding: 1% 5%;
-            background: #faf7f7;
-        }
-
-        h1 {
-            color: rgb(30, 206, 206);
-            text-align: center;
-        }
-        img{
-            border: 1px solid #CCC;
-        }
-        h4{
-            color: #333;
-        }
-        .container .thumbnail{
-            text-align: center;
-        }
-
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 引入css -->
+    <link rel="stylesheet" href="./boot/css/bootstrap.css">
+    <!-- 低于IE9处理 -->
+    <!-- [if lt IE9] >
+    <script src="./boot/js/html5shiv.min.js"></script>
+    <script src="./boot/js/respond.min.js"></script>
+    < ![endif] -->
 </head>
-
 <body>
     <h1>在线相册</h1>
     <nav class="navbar navbar-inverse">
@@ -76,33 +52,11 @@
         </div>
     </div>
 
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.js"></script>
-
-    <script>
-        function send(i){
-            var dirName = $(i).prev().find('h4').html();
-            var res = confirm('确定删除相册:'+dirName+'吗?');
-            if(!res){//点击取消,不删除
-                return;
-            }
-            // 点击确定,删除相册,发送请求给后台
-            $.ajax({
-                url:'/dir/delete?dirName='+dirName,
-                success: function(result){
-                    // alert(result.msg);
-                    
-                    if(result.status == 0){
-                        // 删除成功
-                        // location.href='/';
-                        $(i).parent().parent().remove();
-                    }
-                }
-            })
-        }
+    <!-- 引入js -->
+    <script src="./boot/js/jquery-1.9.1.min.js"></script>
+    <script src="./boot/js/bootstrap.js"></script>
+    
 
 
-    </script>
 </body>
-
 </html>
