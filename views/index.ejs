@@ -1,0 +1,108 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-07-23 09:26:44
+ * @LastEditTime: 2020-07-23 18:47:32
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \photo\views\index.ejs
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线相册</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <style>
+        body {
+            padding: 1% 5%;
+            background: #faf7f7;
+        }
+
+        h1 {
+            color: rgb(30, 206, 206);
+            text-align: center;
+        }
+        img{
+            border: 1px solid #CCC;
+        }
+        h4{
+            color: #333;
+        }
+        .container .thumbnail{
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>在线相册</h1>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">相册</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/dir/mkdir">新建相册</a></li>
+                    <li><a href="/pic/upload">上传图片</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <% for(var i = 0;i<dirs.length;i++) { %>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="thumbnail">
+                    <a href="/pic/show?dirName=<%= dirs[i] %>">
+                        <img src="/imgs/dir.png">
+                        <h4 class="caption"><%= dirs[i] %></h4>
+                    </a>
+                    <a href="javascript:;" onclick="send(this)">删除</a>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+
+    <script>
+        function send(i){
+            var dirName = $(i).prev().find('h4').html();
+            var res = confirm('确定删除相册:'+dirName+'吗?');
+            if(!res){//点击取消,不删除
+                return;
+            }
+            // 点击确定,删除相册,发送请求给后台
+            $.ajax({
+                url:'/dir/delete?dirName='+dirName,
+                success: function(result){
+                    // alert(result.msg);
+                    
+                    if(result.status == 0){
+                        // 删除成功
+                        // location.href='/';
+                        $(i).parent().parent().remove();
+                    }
+                }
+            })
+        }
+
+
+    </script>
+</body>
+
+</html>
